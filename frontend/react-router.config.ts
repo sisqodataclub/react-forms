@@ -2,13 +2,19 @@
 import { type Config } from "@react-router/dev/config";
 
 export default {
-  ssr: true, // Keep SSR enabled for the app in general
-  
-  // Add all your static marketing paths here
+  ssr: true,
   prerender: [
-    "/",
-    "/services/regular", // Fixed typo from 'regulare'
-    "/services/deep-clean", // Assuming 'deep' meant your deep clean route
-    // Add other service routes here as needed
+    "/", // Homepage
+    "/services/regular-cleaning",
+    "/services/deep-cleaning",
+    "/services/end-of-tenancy-cleaning",
+    "/services/appliances-cleaning",
+    "/services/carpet-cleaning",
+    "/services/office-cleaning",
+    "/services/bars-restaurants",
+    "/services/post-construction",
+    "/services/healthcare-cleaning",
+    "/services/student-accommodation",
+    "/tc", // Terms & Conditions or other static page
   ],
 } satisfies Config;
