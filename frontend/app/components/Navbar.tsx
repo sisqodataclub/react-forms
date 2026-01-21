@@ -1,182 +1,158 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom"; 
-import { FaPhoneAlt, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom"; 
+import { FaPhoneAlt, FaWhatsapp, FaEnvelope, FaChevronRight } from "react-icons/fa";
+
+const CONTACT_EMAIL = "clean@ddeepcleaningservices.com";
+const CONTACT_PHONE = "07459416262";
+const CONTACT_WHATSAPP = "07459416262";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const desktopCTARef = useRef<HTMLDivElement>(null);
-  const [desktopCTAHeight, setDesktopCTAHeight] = useState(40); 
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id);
-    if (section) section.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (id: string) => {
+    setMenuOpen(false);
+    if (location.pathname !== "/") {
+      navigate(`/#${id}`);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = 100;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        window.scrollTo({
+          top: elementRect - bodyRect - offset,
+          behavior: "smooth",
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
   };
 
   const links = [
-    { label: "Home", action: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
-    { label: "Services", action: () => scrollToSection("services") },
-    { label: "Get a Quote", action: () => scrollToSection("contact") },
-    { label: "Contact", action: () => scrollToSection("contact") },
+    { label: "Home", action: () => handleNavClick("home") },
+    { label: "Services", action: () => handleNavClick("services") },
+    { label: "Contact Us", action: () => handleNavClick("contact") },
     { href: "/tc", label: "T&C", action: null },
   ];
 
-  useEffect(() => {
-    if (desktopCTARef.current) {
-      setDesktopCTAHeight(desktopCTARef.current.clientHeight);
-    }
-  }, []);
-
   return (
     <>
-      {/* Desktop CTA (Top) */}
-      <div
-        ref={desktopCTARef}
-        className="hidden md:flex fixed top-0 left-0 right-0 z-[9999] bg-green-900 text-white text-sm"
-      >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between py-1.5">
-          <span className="font-medium opacity-90 text-xs lg:text-sm">
-            Need a deep clean? Fast quotes & trusted professionals.
-          </span>
-
-          <div className="flex gap-3 items-center">
-            <Link
-              to="/contact"
-              className="px-4 py-1 bg-white text-green-900 text-xs font-bold rounded-full hover:bg-green-50 transition shadow-sm"
-            >
-              Get a Quote
-            </Link>
-
-            <a
-              href="https://wa.me/441234567890"
-              className="px-3 py-1 bg-white/10 rounded-full flex items-center gap-2 hover:bg-white/20 transition text-xs font-medium"
-            >
-              <FaWhatsapp className="text-sm" /> WhatsApp
-            </a>
-
-            <a
-              href="tel:+441234567890"
-              className="px-3 py-1 bg-white/10 rounded-full flex items-center gap-2 hover:bg-white/20 transition text-xs font-medium"
-            >
-              <FaPhoneAlt className="text-xs" /> Call
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Navbar */}
       <header
-        className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
-        style={{ top: `${desktopCTAHeight}px` }} 
+        className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${
+          scrolled ? "bg-white/90 backdrop-blur-md shadow-lg py-3" : "bg-white py-5"
+        }`}
       >
-        <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-2.5">
-          <Link to="/" className="text-lg font-bold tracking-tight text-green-950 flex items-center gap-2">
-            <div className="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">D</div>
-            DDeep Cleaning
+        <nav className="mx-auto max-w-7xl flex items-center justify-between px-6">
+          <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+            <div className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-green-200 group-hover:scale-105 transition-transform">
+              D
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-lg font-black text-slate-900 tracking-tight">D DEEP</span>
+              <span className="text-[10px] font-bold text-green-600 uppercase tracking-[0.2em]">Cleaning Services</span>
+            </div>
           </Link>
 
-          {/* Desktop Menu */}
-          <ul className="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
-            {links.map((link) => (
-              <li key={link.label}>
-                {link.action ? (
-                  <button 
-                    onClick={link.action} 
-                    className="hover:text-green-600 transition-colors relative group"
-                  >
-                    {link.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 transition-all group-hover:w-full"></span>
-                  </button>
-                ) : (
-                  <Link 
-                    to={link.href!} 
-                    className="hover:text-green-600 transition-colors relative group"
-                  >
-                    {link.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 transition-all group-hover:w-full"></span>
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
+          <div className="hidden lg:flex items-center gap-8">
+            <ul className="flex gap-6 text-[12px] font-black uppercase tracking-widest text-slate-500 border-r border-slate-200 pr-8">
+              {links.map((link) => (
+                <li key={link.label}>
+                  {link.action ? (
+                    <button onClick={link.action} className="hover:text-green-600 transition-colors relative group">
+                      {link.label}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 transition-all group-hover:w-full" />
+                    </button>
+                  ) : (
+                    <Link to={link.href!} className="hover:text-green-600 transition-colors relative group">
+                      {link.label}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 transition-all group-hover:w-full" />
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
 
-          {/* Mobile Hamburger */}
-          <button
-            onClick={toggleMenu}
-            aria-label="Toggle Menu"
-            aria-expanded={menuOpen}
-            className="md:hidden focus:outline-none p-1"
-          >
-            <div className={`w-5 h-0.5 bg-slate-900 mb-1 transition-all ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-            <div className={`w-5 h-0.5 bg-slate-900 mb-1 transition-all ${menuOpen ? "opacity-0" : ""}`} />
-            <div className={`w-5 h-0.5 bg-slate-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
+            <div className="flex items-center gap-6">
+              <a href={`tel:${CONTACT_PHONE}`} className="flex flex-col items-end group">
+                <span className="text-[9px] font-bold text-green-600 uppercase tracking-tighter">Call Now</span>
+                <span className="text-sm font-black text-slate-900 group-hover:text-green-600 transition-colors">{CONTACT_PHONE}</span>
+              </a>
+              
+              <a 
+                href={`https://wa.me/${CONTACT_WHATSAPP.replace(/\D/g, "")}`}
+                className="w-10 h-10 bg-green-50 text-green-600 rounded-full flex items-center justify-center hover:bg-green-600 hover:text-white transition-all shadow-sm"
+              >
+                <FaWhatsapp size={18} />
+              </a>
+
+              <button 
+                onClick={() => handleNavClick("contact")}
+                className="bg-slate-900 hover:bg-green-600 text-white px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-xl active:scale-95"
+              >
+                Get Free Quote
+              </button>
+            </div>
+          </div>
+
+          <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5">
+            <div className={`w-6 h-0.5 bg-slate-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+            <div className={`w-6 h-0.5 bg-slate-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+            <div className={`w-6 h-0.5 bg-slate-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
           </button>
         </nav>
 
-        {/* Mobile Menu */}
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"}`}>
-          <ul className="bg-white border-t border-slate-100 flex flex-col px-6 py-4 gap-4 text-slate-700 font-medium shadow-xl">
+        <div className={`lg:hidden absolute top-full left-0 right-0 bg-white border-t border-slate-100 shadow-2xl transition-all duration-300 overflow-hidden ${menuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"}`}>
+          <div className="p-6 flex flex-col gap-2">
             {links.map((link) => (
-              <li key={link.label}>
+              <div key={link.label} className="border-b border-slate-50 last:border-0">
                 {link.action ? (
-                  <button
-                    onClick={() => {
-                      link.action && link.action();
-                      setMenuOpen(false);
-                    }}
-                    className="block hover:text-green-600 transition-colors w-full text-left"
-                  >
-                    {link.label}
+                  <button onClick={link.action} className="flex items-center justify-between w-full py-4 text-left font-black text-slate-900 uppercase tracking-widest text-sm">
+                    {link.label} <FaChevronRight className="text-green-500 text-xs" />
                   </button>
                 ) : (
-                  <Link
-                    to={link.href!}
-                    className="block hover:text-green-600 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
+                  <Link to={link.href!} onClick={() => setMenuOpen(false)} className="flex items-center justify-between w-full py-4 font-black text-slate-900 uppercase tracking-widest text-sm">
+                    {link.label} <FaChevronRight className="text-green-500 text-xs" />
                   </Link>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </header>
 
-      {/* Mobile CTA (Bottom Bar) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-green-100 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-        <div className="grid grid-cols-3 text-xs font-semibold text-slate-600">
-          <a href="tel:+441234567890" className="py-3 flex flex-col items-center gap-1 active:bg-green-50">
-            <FaPhoneAlt className="text-lg text-green-600" />
-            Call
+      {/* MOBILE QUICK-ACTION TAB BAR (Thinner & Bottom Docked) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[1001] bg-slate-900 border-t border-white/10">
+        <div className="flex items-center justify-between shadow-2xl">
+          <a href={`tel:${CONTACT_PHONE}`} className="flex-1 flex flex-col items-center py-2.5 text-white active:bg-slate-800 transition-colors">
+            <FaPhoneAlt className="text-green-500 mb-0.5 text-sm" />
+            <span className="text-[9px] font-black uppercase tracking-widest">Call</span>
           </a>
-
-          <a
-            href="https://wa.me/441234567890"
-            className="py-3 flex flex-col items-center gap-1 border-x border-slate-100 active:bg-green-50"
-          >
-            <FaWhatsapp className="text-lg text-green-600" />
-            WhatsApp
+          <a href={`https://wa.me/${CONTACT_WHATSAPP.replace(/\D/g, "")}`} className="flex-1 flex flex-col items-center py-2.5 border-x border-white/5 text-white active:bg-slate-800 transition-colors">
+            <FaWhatsapp className="text-green-500 mb-0.5 text-sm" />
+            <span className="text-[9px] font-black uppercase tracking-widest">WhatsApp</span>
           </a>
-
-          <a href="mailto:info@ddeepcleaning.co.uk" className="py-3 flex flex-col items-center gap-1 active:bg-green-50">
-            <FaEnvelope className="text-lg text-green-600" />
-            Email
+          <a href={`mailto:${CONTACT_EMAIL}`} className="flex-1 flex flex-col items-center py-2.5 text-white active:bg-slate-800 transition-colors">
+            <FaEnvelope className="text-green-500 mb-0.5 text-sm" />
+            <span className="text-[9px] font-black uppercase tracking-widest">Email</span>
           </a>
         </div>
       </div>
 
-      {/* ✅ FIX ADDED HERE: 
-        Mobile Bottom Spacer to prevent content from being hidden behind the fixed CTA. 
-        h-[65px] creates just enough room. 
-      */}
-      <div className="md:hidden h-[65px]" />
-
-      {/* Desktop Top Spacer */}
-      <div className="hidden md:block" style={{ height: `${desktopCTAHeight + 55}px` }} />
+      {/* Spacers to prevent content overlap */}
+      <div className="h-20 md:h-24" /> {/* Top Spacer */}
+      <div className="lg:hidden h-12" /> {/* Bottom Spacer for mobile bar */}
     </>
   );
 }

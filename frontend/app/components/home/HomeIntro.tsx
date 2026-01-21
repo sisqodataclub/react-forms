@@ -120,13 +120,7 @@ export default function HomeIntro() {
               </motion.div>
             </motion.div>
 
-            {/* CTA */}
-            <motion.div variants={itemVariants}>
-              <button className="group flex items-center justify-center gap-3 bg-green-900 text-white px-8 py-3 rounded-full font-bold text-base shadow-lg hover:bg-green-800 transition-all duration-300 transform hover:-translate-y-1">
-                See Our Process 
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform text-xs" />
-              </button>
-            </motion.div>
+            
 
           </motion.div>
 

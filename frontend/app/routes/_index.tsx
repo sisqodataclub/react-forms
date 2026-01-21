@@ -1,7 +1,29 @@
 ﻿"use client";
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, ReactNode } from "react";
+import { useRef } from "react";
+import type { ReactNode } from "react";
+
+// Native React Router v7 Meta Function - Optimized for all services
+export function meta() {
+  return [
+    { title: "Deep Cleaning Manchester & Liverpool | D DEEP Cleaning Services" },
+    { 
+      name: "description", 
+      content: "Professional cleaning in Manchester & Liverpool. Specialists in Deep Cleaning, End of Tenancy, Regular Domestic, Office, After Builders, Hospitality, Student Accommodation, and CQC Healthcare Cleaning." 
+    },
+    { property: "og:title", content: "D DEEP Cleaning | Commercial & Residential Cleaning Experts" },
+    { 
+      property: "og:description", 
+      content: "Complete cleaning solutions across the North West: From domestic deep cleans and carpet stain removal to clinical healthcare and office maintenance." 
+    },
+    { 
+      name: "keywords", 
+      content: "Deep Cleaning Manchester, End of Tenancy Cleaning Liverpool, Regular Cleaners Manchester, After Builders Cleaning, Office Cleaning Liverpool, Restaurant Cleaning, Student Accommodation Turnaround, Clinical Cleaning CQC, Carpet Cleaning Manchester, Appliance Cleaning, Move out cleaning, HMO cleaning North West" 
+    },
+    { name: "robots", content: "index, follow" },
+  ];
+}
 
 import HomeHero from "../components/home/HomeHero";
 import HomeIntro from "../components/home/HomeIntro";
@@ -12,9 +34,6 @@ import HomeAreas from "../components/home/HomeAreas";
 import HomeReviews from "../components/home/HomeReviews";
 import HomeCTA from "../components/home/HomeCTA";
 import FixedCTA2 from "../components/mobilenav";
-
-// Dynamic CTA text
-
 
 /** =====================
  * StoryCard Component
@@ -28,11 +47,8 @@ function StoryCard({ children, bgImage }: StoryCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
-  // Parallax & subtle scale
   const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
-
-  // Fade in as section enters viewport
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.5], [0, 0.5, 1]);
 
   return (
@@ -40,18 +56,14 @@ function StoryCard({ children, bgImage }: StoryCardProps) {
       ref={ref}
       className="relative w-full min-h-screen flex items-center justify-center snap-start overflow-hidden"
     >
-      {/* Background Image */}
       {bgImage && (
         <motion.div
           className="absolute inset-0 bg-center bg-cover"
           style={{ backgroundImage: `url(${bgImage})`, scale }}
         />
       )}
-
-      {/* Overlay */}
       {bgImage && <div className="absolute inset-0 bg-black/30" />}
 
-      {/* Content with fade + parallax */}
       <motion.div
         className="relative max-w-6xl px-6 text-center w-full"
         style={{ y, opacity }}
@@ -72,17 +84,63 @@ function StoryCard({ children, bgImage }: StoryCardProps) {
 export default function HomePage() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 35, restDelta: 0.001 });
-  
+
+  // ===== SEO SCHEMA DATA =====
+  const businessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "D DEEP Cleaning Services",
+    "image": "https://yourdomain.com/logo.png", // Replace with your actual logo URL
+    "@id": "https://yourdomain.com",
+    "url": "https://yourdomain.com",
+    "telephone": "07459416262",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Manchester",
+      "addressRegion": "Greater Manchester",
+      "addressCountry": "GB"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 53.4808,
+      "longitude": -2.2426
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Manchester" },
+      { "@type": "City", "name": "Liverpool" },
+      { "@type": "City", "name": "Salford" },
+      { "@type": "City", "name": "Warrington" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Cleaning Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deep Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Regular Domestic Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "End of Tenancy Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Appliance & Oven Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Carpet & Upholstery Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Commercial Office Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "After Builders Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Hospitality & Restaurant Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Student Accommodation Cleaning" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Healthcare & Clinical Cleaning" } }
+      ]
+    }
+  };
 
   return (
     <main className="snap-y snap-mandatory scroll-smooth">
-      {/* Hero Section */}
-    
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
+      />
+
       <StoryCard bgImage="/assets/hero-bg.jpg">
         <HomeHero />
       </StoryCard>
 
-      {/* Intro Sections */}
       <StoryCard>
         <HomeIntro />
       </StoryCard>
@@ -91,7 +149,6 @@ export default function HomePage() {
         <HomeIntro2 />
       </StoryCard>
 
-      {/* Services / Process */}
       <StoryCard>
         <HomeServices />
       </StoryCard>
@@ -108,33 +165,22 @@ export default function HomePage() {
         <HomeReviews />
       </StoryCard>
 
-      {/* CTA Section */}
       <StoryCard>
         <HomeCTA />
       </StoryCard>
 
-      {/* Scroll Progress Bar */}
-      {/* Scroll Progress Bar at the top */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-2 bg-blue-500 rounded-full origin-left shadow-lg z-50"
         style={{ scaleX }}
       />
 
-
-      {/* Global Styles for Snap */}
       <style>{`
         html {
           scroll-snap-type: y mandatory;
           scroll-behavior: smooth;
         }
-
-        body {
-          margin: 0;
-        }
-
-        section {
-          scroll-snap-align: start;
-        }
+        body { margin: 0; }
+        section { scroll-snap-align: start; }
       `}</style>
     </main>
   );

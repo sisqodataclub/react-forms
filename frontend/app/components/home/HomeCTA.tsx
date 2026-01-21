@@ -1,191 +1,171 @@
-import { motion } from "framer-motion";
-import { Link } from "react-router";
-import { FaPhone, FaEnvelope, FaWhatsapp, FaClipboardList, FaCalendarAlt, FaMagic, FaSmileBeam, FaArrowRight } from "react-icons/fa";
+"use client";
 
+import { motion } from "framer-motion";
+import { Link } from "react-router"; 
+import { 
+  FaPhone, 
+  FaEnvelope, 
+  FaWhatsapp, 
+  FaClipboardList, 
+  FaCalendarAlt, 
+  FaMagic, 
+  FaSmileBeam, 
+  FaArrowRight 
+} from "react-icons/fa";
+
+// ===== CONTACT CONSTANTS =====
+const CONTACT_EMAIL = "clean@ddeepcleaningservices.com";
+const CONTACT_PHONE = "07459416262";
+const CONTACT_WHATSAPP = "07459416262";
+
+// ===== STEPS =====
 const steps = [
-  { 
-    title: "Request Quote", 
-    desc: "Fill our 30-second form.", 
-    icon: FaClipboardList 
-  },
-  { 
-    title: "Schedule It", 
-    desc: "Pick a time that works.", 
-    icon: FaCalendarAlt 
-  },
-  { 
-    title: "We Clean", 
-    desc: "Our experts work their magic.", 
-    icon: FaMagic 
-  },
-  { 
-    title: "You Relax", 
-    desc: "Enjoy your pristine space.", 
-    icon: FaSmileBeam 
-  },
+  { title: "Request Quote", desc: "Fill our 30-second form.", icon: FaClipboardList },
+  { title: "Schedule It", desc: "Pick a time that works.", icon: FaCalendarAlt },
+  { title: "We Clean", desc: "Our experts work magic.", icon: FaMagic },
+  { title: "You Relax", desc: "Enjoy your pristine space.", icon: FaSmileBeam },
 ];
 
 export default function HomeCTA() {
 
-  // SEO: Structured Data for "HowTo"
+  // SEO: HowTo Schema for the 4-step process
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "How to Book a Professional Clean",
+    "description": "Four simple steps to booking a deep clean for your home or office.",
     "step": steps.map((step, index) => ({
       "@type": "HowToStep",
       "position": index + 1,
       "name": step.title,
-      "text": step.desc
+      "itemListElement": [{
+        "@type": "HowToDirection",
+        "text": step.desc
+      }]
     }))
   };
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
   return (
-    <section id="contact" className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden bg-white snap-start">
+    <section id="contact" className="relative w-full min-h-[100dvh] flex flex-col justify-center items-center overflow-hidden bg-white snap-start pt-24 pb-24 lg:py-0">
       
-      {/* ===== SEO INJECTION ===== */}
       <script type="application/ld+json">
         {JSON.stringify(schemaData)}
       </script>
 
-      {/* ===== AMBIENT BACKGROUND ===== */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-green-50/50 to-teal-50/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-green-50/50 to-teal-50/30 pointer-events-none" aria-hidden="true" />
       
-      {/* Dynamic Blobs */}
-      <motion.div 
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-        transition={{ duration: 25, repeat: Infinity }}
-        className="absolute top-[-10%] left-[-10%] w-[60vh] h-[60vh] bg-green-200/40 rounded-full blur-[100px] pointer-events-none"
-      />
-      <motion.div 
-        animate={{ scale: [1, 1.1, 1], x: [0, -50, 0] }}
-        transition={{ duration: 20, repeat: Infinity }}
-        className="absolute bottom-[-10%] right-[-10%] w-[50vh] h-[50vh] bg-teal-200/40 rounded-full blur-[100px] pointer-events-none"
-      />
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 lg:px-8 flex flex-col items-center h-full justify-evenly">
 
-
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center h-full justify-center">
-
-        {/* 1. HEADER */}
-        <div className="text-center mb-12 lg:mb-16">
+        <header className="text-center shrink-0 mb-12">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-green-950 tracking-tight mb-4"
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-green-950 tracking-tight mb-4"
           >
             Ready for a <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-500">
               Spotless Future?
             </span>
           </motion.h2>
-          <motion.p 
-             initial={{ opacity: 0 }}
-             whileInView={{ opacity: 1 }}
-             transition={{ delay: 0.2 }}
-             className="text-slate-500 text-lg max-w-xl mx-auto"
-          >
-            Four simple steps to a cleaner, healthier environment.
+          <motion.p className="text-slate-500 text-sm md:text-lg max-w-xl mx-auto">
+            Book your expert cleaners in Manchester and the North West in four easy steps.
           </motion.p>
-        </div>
+        </header>
 
-
-        {/* 2. THE TIMELINE (Desktop Horizontal / Mobile Grid) */}
+        {/* Steps section */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="w-full relative flex flex-col md:flex-row justify-between items-center max-w-5xl mb-16 gap-8 md:gap-0"
+          className="w-full relative grid grid-cols-2 md:flex md:flex-row justify-between items-start md:items-center max-w-5xl gap-y-6 gap-x-4 md:gap-0 mb-16"
         >
-          {/* Connector Line (Desktop Only) */}
-          <div className="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-gradient-to-r from-green-200 via-teal-200 to-green-200 -z-10" />
-
+          <div className="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-gradient-to-r from-green-200 via-teal-200 to-green-200 -z-10" aria-hidden="true" />
           {steps.map((step, index) => (
-            <motion.div 
-              key={index} 
-              variants={itemVariants}
-              className="flex flex-col items-center text-center group w-full md:w-auto"
-            >
-              {/* Icon Circle */}
-              <div className="relative w-20 h-20 rounded-2xl bg-white border border-green-100 shadow-lg shadow-green-900/5 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-green-300 transition-all duration-300 z-10">
-                <step.icon className="text-3xl text-green-600 group-hover:text-teal-500 transition-colors" />
-                
-                {/* Number Badge */}
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-green-900 text-white flex items-center justify-center font-bold text-sm border-4 border-white">
+            <div key={index} className="flex flex-col items-center text-center group w-full md:w-auto">
+              <div className="relative w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-white border border-green-100 shadow-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-all z-10">
+                <step.icon className="text-xl md:text-3xl text-green-600" aria-hidden="true" />
+                <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green-900 text-white flex items-center justify-center font-bold text-xs">
                   {index + 1}
                 </div>
               </div>
-
-              {/* Text */}
-              <h3 className="text-xl font-bold text-green-950 mb-1">{step.title}</h3>
-              <p className="text-slate-500 text-sm">{step.desc}</p>
-            </motion.div>
+              <h3 className="text-sm font-bold text-green-950">{step.title}</h3>
+              <p className="text-slate-500 text-xs">{step.desc}</p>
+            </div>
           ))}
         </motion.div>
 
-
-        {/* 3. THE "FLOATING ISLAND" CTA */}
+        {/* ACTION BAR */}
         <motion.div 
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4, type: "spring" }}
-          className="w-full max-w-4xl"
+          className="w-full max-w-5xl"
         >
-          <div className="bg-white/60 backdrop-blur-xl border border-green-100 rounded-[2.5rem] p-3 md:p-4 shadow-2xl shadow-green-900/10 flex flex-col md:flex-row items-center gap-4">
+          <div className="bg-white/80 backdrop-blur-xl border border-green-100 rounded-[2rem] p-4 md:p-6 shadow-2xl shadow-green-900/10 flex flex-col gap-6">
             
-            {/* Primary Action */}
-            <Link 
-              to="/contact" 
-              className="w-full md:w-auto flex-grow bg-green-900 hover:bg-green-800 text-white text-lg font-bold py-5 px-8 rounded-[2rem] flex items-center justify-center gap-3 shadow-lg hover:shadow-green-900/20 transition-all duration-300 group"
-            >
-              Get Your Free Quote 
-              <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <div className="flex flex-col lg:flex-row items-stretch gap-4">
+              {/* PRIMARY CTA */}
+              <Link 
+                to="/contact" 
+                className="flex-grow bg-green-900 hover:bg-green-800 text-white text-lg font-bold py-5 px-8 rounded-2xl flex items-center justify-center gap-3 shadow-lg transition-all group"
+              >
+                Get Your Free Quote 
+                <FaArrowRight className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+              </Link>
 
-            {/* Divider (Desktop) */}
-            <div className="hidden md:block w-px h-12 bg-green-200/50" />
+              {/* CONTACT DETAILS GRID */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Phone */}
+                <a href={`tel:${CONTACT_PHONE}`} className="flex items-center gap-4 p-4 rounded-2xl bg-green-50/50 border border-green-100 hover:bg-green-100 transition-colors group" aria-label="Call us">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-green-700 shadow-sm group-hover:scale-110 transition-transform">
+                    <FaPhone aria-hidden="true" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider leading-none mb-1">Call Us</p>
+                    <p className="text-sm font-bold text-green-950 whitespace-nowrap">{CONTACT_PHONE}</p>
+                  </div>
+                </a>
 
-            {/* Secondary Actions (Pill Group) */}
-            <div className="flex gap-2 w-full md:w-auto justify-center">
-              
-              <a href="tel:+441234567890" className="flex flex-col items-center justify-center w-20 h-20 rounded-2xl bg-white hover:bg-green-50 text-green-700 transition-colors border border-green-50 shadow-sm group" title="Call Us">
-                <FaPhone className="text-xl mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[10px] font-bold uppercase tracking-wide">Call</span>
-              </a>
+                {/* Email */}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="flex items-center gap-4 p-4 rounded-2xl bg-green-50/50 border border-green-100 hover:bg-green-100 transition-colors group" aria-label="Email us">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-green-700 shadow-sm group-hover:scale-110 transition-transform shrink-0">
+                    <FaEnvelope aria-hidden="true" />
+                  </div>
+                  <div className="text-left overflow-visible">
+                    <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider leading-none mb-1">Email Us</p>
+                    <p className="text-[11px] md:text-sm font-bold text-green-950 break-all leading-tight">
+                      {CONTACT_EMAIL}
+                    </p>
+                  </div>
+                </a>
 
-              <a href="mailto:info@ddeep.com" className="flex flex-col items-center justify-center w-20 h-20 rounded-2xl bg-white hover:bg-green-50 text-green-700 transition-colors border border-green-50 shadow-sm group" title="Email Us">
-                <FaEnvelope className="text-xl mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[10px] font-bold uppercase tracking-wide">Email</span>
-              </a>
-
-              <a href="https://wa.me/441234567890" className="flex flex-col items-center justify-center w-20 h-20 rounded-2xl bg-white hover:bg-green-50 text-green-700 transition-colors border border-green-50 shadow-sm group" title="WhatsApp">
-                <FaWhatsapp className="text-2xl mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[10px] font-bold uppercase tracking-wide">Chat</span>
-              </a>
-
+                {/* WhatsApp */}
+                <a href={`https://wa.me/${CONTACT_WHATSAPP.replace(/\D/g, '')}`} className="flex items-center gap-4 p-4 rounded-2xl bg-green-600 hover:bg-green-700 text-white transition-colors group shadow-md shadow-green-900/10" aria-label="Chat on WhatsApp">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                    <FaWhatsapp className="text-xl" aria-hidden="true" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-bold text-green-100 uppercase tracking-wider leading-none mb-1">WhatsApp</p>
+                    <p className="text-sm font-bold">Live Chat</p>
+                  </div>
+                </a>
+              </div>
             </div>
 
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-[11px] md:text-xs text-slate-400 font-bold uppercase tracking-widest pt-2 border-t border-slate-100">
+               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true" /> Free Cancellation</span>
+               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true" /> Fully Insured</span>
+               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true" /> Instant Quote</span>
+            </div>
           </div>
-          
-          {/* Trust Micro-copy */}
-          <div className="text-center mt-6 flex justify-center gap-6 text-sm text-slate-400 font-medium">
-             <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Free Cancellation</span>
-             <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Fully Insured</span>
-             <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Instant Quote</span>
-          </div>
-
         </motion.div>
 
       </div>

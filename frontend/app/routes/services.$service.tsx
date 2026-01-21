@@ -1,17 +1,13 @@
-"use client";
-
-import { useParams, Navigate } from "react-router-dom";
-import DeepCleaningContent from "../components/landing/dynamic";
+import { Navigate, useParams } from "react-router-dom";
+import DynamicServicePage from "../components/landing/dynamic";
 import { servicesContent } from "../components/landing/servicesContent";
 
-export default function ServicePage() {
-  const { service } = useParams();
+export default function ServiceRoute() {
+  const { service } = useParams<{ service: string }>();
 
-  if (!service || !servicesContent[service as keyof typeof servicesContent]) {
+  if (!service || !servicesContent[service]) {
     return <Navigate to="/404" replace />;
   }
 
-  const content = servicesContent[service as keyof typeof servicesContent];
-
-  return <DeepCleaningContent {...content} />;
+  return <DynamicServicePage {...servicesContent[service]} />;
 }

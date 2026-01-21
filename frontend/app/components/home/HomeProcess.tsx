@@ -5,154 +5,157 @@ import { Link } from "react-router";
 const whyUsPoints = [
   {
     id: "01",
-    title: "Vetted Professionals",
-    description: "Fully trained, background-checked, and uniformed experts committed to perfection.",
+    title: "Vetted Experts",
+    description: "Background-checked & fully trained professional cleaners.",
     icon: FaUserCheck,
     color: "from-blue-400 to-teal-400"
   },
   {
     id: "02",
-    title: "Eco-First Approach",
-    description: "We use non-toxic, biodegradable products safe for pets, kids, and the planet.",
+    title: "Eco-Friendly",
+    description: "Safe, non-toxic products for a healthy home environment.",
     icon: FaLeaf,
     color: "from-green-400 to-emerald-400"
   },
   {
     id: "03",
-    title: "Reliability Guaranteed",
-    description: "We value your time. Punctual arrivals and efficient workflows, every single visit.",
-    icon: FaStar, // Changed to Star for "Quality"
+    title: "Reliability",
+    description: "Punctual arrival and consistent cleaning standards.",
+    icon: FaStar,
     color: "from-yellow-400 to-orange-400"
   },
   {
     id: "04",
     title: "Fully Insured",
-    description: "Complete peace of mind with comprehensive liability coverage for your property.",
+    description: "Comprehensive public liability insurance for total peace of mind.",
     icon: FaShieldAlt,
     color: "from-teal-400 to-cyan-400"
   },
 ];
 
 export default function HomeWhyUs() {
-  // Stagger Effect
+  
+  // SEO Schema - Using ItemList for the unique selling points
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Why Choose D DEEP Cleaning Services",
+    "description": "Our core values and service standards for residential and commercial cleaning.",
+    "itemListElement": whyUsPoints.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.title,
+      "description": item.description
+    }))
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+      transition: { staggerChildren: 0.1 }
     }
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.215, 0.61, 0.355, 1] } }
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
   };
 
   return (
-    <section className="relative w-full h-screen flex items-center justify-center bg-white overflow-hidden snap-start">
+    <section id="why-us" className="relative w-full min-h-screen flex flex-col justify-center bg-white overflow-hidden snap-start py-20 lg:py-0">
       
-      {/* ===== AMBIENT BACKGROUND ===== */}
-      {/* A clean, almost clinical white/green gradient base */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green-50/80 via-white to-white pointer-events-none" />
+      {/* ===== SEO ===== */}
+      <script type="application/ld+json">
+        {JSON.stringify(schemaData)}
+      </script>
+
+      {/* ===== BACKGROUND ===== */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green-50/60 via-white to-white pointer-events-none" aria-hidden="true" />
       
-      {/* Moving Light Orbs */}
       <motion.div 
-        animate={{ rotate: 360 }}
-        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        className="absolute -top-1/2 -left-1/2 w-[100vw] h-[100vw] bg-gradient-to-br from-green-100/30 to-transparent rounded-full blur-[120px] pointer-events-none"
-      />
-      <motion.div 
-        animate={{ rotate: -360 }}
+        animate={{ scale: [1, 1.1, 1], rotate: 360 }}
         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        className="absolute -bottom-1/2 -right-1/2 w-[100vw] h-[100vw] bg-gradient-to-tl from-teal-100/30 to-transparent rounded-full blur-[120px] pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-green-100/30 rounded-full blur-[100px] pointer-events-none"
+        aria-hidden="true"
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 flex flex-col justify-center h-full">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col h-full justify-center">
         
         {/* ===== HEADER ===== */}
-        <div className="text-center mb-12 lg:mb-16">
+        <header className="text-center mb-6 lg:mb-16 shrink-0">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 border border-green-100 mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 border border-green-100 mb-3"
           >
-             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-             <span className="text-green-800 text-xs font-bold tracking-widest uppercase">Why We Lead</span>
+             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
+             <span className="text-green-800 text-[10px] md:text-xs font-bold tracking-widest uppercase">The North West Choice</span>
           </motion.div>
           
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-green-950 tracking-tight"
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-green-950 tracking-tight leading-tight"
           >
-            Cleanliness Redefined.
+            A Higher Standard <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-500">
+              of Clean.
+            </span>
           </motion.h2>
-        </div>
+        </header>
 
-        {/* ===== THE PILLARS GRID ===== */}
+        {/* ===== BENTO GRID LAYOUT ===== */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 h-auto"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 lg:gap-8"
+          role="list"
         >
           {whyUsPoints.map((item, i) => (
             <motion.div
               key={item.id}
               variants={cardVariants}
-              whileHover={{ y: -10 }}
-              className="relative group h-full"
+              className="relative group"
+              role="listitem"
             >
-              {/* The Card */}
-              <div className="relative h-full bg-white/40 backdrop-blur-xl border border-white/60 rounded-[2rem] p-8 flex flex-col overflow-hidden transition-all duration-500 hover:bg-white hover:shadow-[0_20px_40px_-15px_rgba(0,128,0,0.15)] hover:border-green-200">
+              <div className="h-full bg-white/60 backdrop-blur-xl border border-green-100 rounded-2xl lg:rounded-[2rem] p-4 lg:p-8 flex flex-col transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-green-900/10 hover:border-green-200">
                 
-                {/* Background Number (Watermark) */}
-                <span className="absolute -right-4 -top-4 text-[8rem] font-bold text-green-900/5 select-none transition-colors group-hover:text-green-900/10 leading-none font-serif">
+                <span className="absolute right-2 top-2 text-4xl lg:text-[6rem] font-bold text-green-900/5 select-none font-serif leading-none" aria-hidden="true">
                   {item.id}
                 </span>
 
-                {/* Animated Icon Container */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} p-0.5 mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                   <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
-                      <item.icon className="text-2xl text-green-700" />
-                   </div>
+                <div className={`w-10 h-10 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-gradient-to-br ${item.color} p-0.5 mb-3 lg:mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500`}>
+                    <div className="w-full h-full bg-white rounded-[10px] lg:rounded-[14px] flex items-center justify-center">
+                       <item.icon className="text-lg lg:text-2xl text-green-700" aria-hidden="true" />
+                    </div>
                 </div>
 
-                {/* Content */}
-                <h3 className="text-xl font-bold text-green-950 mb-4 group-hover:text-green-700 transition-colors">
+                <h3 className="text-sm lg:text-xl font-bold text-green-950 mb-1 lg:mb-3 group-hover:text-green-700 transition-colors">
                   {item.title}
                 </h3>
                 
-                <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-grow">
+                <p className="text-slate-500 text-xs lg:text-sm leading-snug lg:leading-relaxed">
                   {item.description}
                 </p>
 
-                {/* Bottom Line Indicator */}
-                <div className={`h-1 w-12 rounded-full bg-gradient-to-r ${item.color} opacity-30 group-hover:w-full group-hover:opacity-100 transition-all duration-500`} />
+                <div className={`mt-4 lg:mt-auto h-0.5 lg:h-1 w-6 lg:w-8 rounded-full bg-gradient-to-r ${item.color} opacity-40 group-hover:w-full group-hover:opacity-100 transition-all duration-500`} aria-hidden="true" />
               
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* ===== BOTTOM CTA ===== */}
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 md:mt-16 text-center"
+          transition={{ delay: 0.6 }}
+          className="mt-8 lg:mt-16 text-center shrink-0"
         >
-          <p className="text-slate-400 text-sm mb-4">Ready to experience the difference?</p>
-          <Link 
-            to="/contact" 
-            className="inline-flex items-center gap-3 text-green-950 font-bold border-b-2 border-green-200 hover:border-green-600 pb-1 transition-all"
-          >
-            Get a Free Quote <FaArrowRight className="text-green-600" />
-          </Link>
         </motion.div>
 
       </div>
