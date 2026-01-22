@@ -2,7 +2,7 @@
 import { type Config } from "@react-router/dev/config";
 
 export default {
-  ssr: true,
+  ssr: false,
   prerender: [
     "/", // Homepage
     "/services/regular-cleaning",
